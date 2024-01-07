@@ -38,7 +38,7 @@ jobs:
           host:         'windows'
           target:       'desktop'
           arch:         'win64_mingw81'
-          archives:     'x86_64 qtbase'
+          archives:     'x86_64 qttools qtbase'
           cache:        true
           setup-python: false
 
