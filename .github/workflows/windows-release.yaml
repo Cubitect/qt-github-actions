@@ -12,11 +12,8 @@ defaults:
     shell: cmd
 
 env:
-  PROG:         qt-github-actions
-  SOURCE_DIR:   ${{ github.workspace }}
-  BUILD_DIR:    ${{ github.workspace }}\build
-  DEPLOY_DIR:   ${{ github.workspace }}\${{ env.PROG }}
-  EXECUTABLE:   ${{ env.BUILD_DIR }}\release\${{ env.PROG }}\${{ env.PROG }}.exe
+  PROG:     qt-github-actions
+  SOURCE:   ${{github.workspace}}
 
 jobs:
   build:
@@ -29,7 +26,7 @@ jobs:
           submodules: recursive
 
       - name: (2) Get all tags for correct version determination
-        working-directory: ${{ env.SOURCE_DIR }}
+        working-directory: ${{env.SOURCE_DIR}}
         run:  |
               git fetch --all --tags -f
 
@@ -44,29 +41,24 @@ jobs:
           cache:        true
           setup-python: false
 
-      - name: (4) Prepare directories
-        working-directory: ${{ env.SOURCE_DIR }}
+      - name: (4) Build
+        working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              mkdir ${{ env.BUILD_DIR }}
-              mkdir ${{ env.DEPLOY_DIR }}
-
-      - name: (5) Build
-        working-directory: ${{ env.BUILD_DIR }}
-        run:  |
-              qmake CONFIG+=release ${{ env.SOURCE_DIR }}
+              qmake CONFIG+=release ${{env.SOURCE_DIR}}
               mingw32-make
               
-      - name: (6) Deploy
-        working-directory: ${{ env.DEPLOY_DIR }}
+      - name: (5) Deploy
+        working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              copy ${{ env.EXECUTABLE }} .
-              windeployqt --dir . ${{ env.EXECUTABLE }} --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
+              mkdir ${{env.PROG}}
+              copy ${{env.SOURCE_DIR}}\release\${{env.PROG}} ${{env.PROG}}
+              windeployqt --dir ${{env.PROG}} ${{env.SOURCE_DIR}}\release\${{env.PROG}} --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
 
-      - name: (7) Save build artifact
+      - name: (6) Save build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.PROG }}-${{ github.ref_name }}-win
-          path: ${{ env.DEPLOY_DIR }}
+          name: ${{env.PROG}}-${{github.ref_name}}-win
+          path: ${{env.PROG}}
 
 
 
