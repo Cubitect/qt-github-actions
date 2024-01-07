@@ -59,9 +59,11 @@ jobs:
       - name: (6) Deploy
         working-directory: ${{ env.DEPLOY_DIR }}
         run:  |
-              windeployqt ${{ env.BUILD_DIR }}\release\${{  env.EXECUTABLE }} --dir . --release --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
               copy ${{ env.BUILD_DIR }}\release\${{  env.EXECUTABLE }} .
+              windeployqt ${{ env.BUILD_DIR }}\release\${{  env.EXECUTABLE }} --dir . --release --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
+              dir
               7z a ${{ env.SOURCE_DIR }}\${{ env.ARTIFACT }} ${{ env.DEPLOY_DIR }}\*
+              dir ${{ env.SOURCE_DIR }}
 
       - name: (7) Save build artifact
         uses: actions/upload-artifact@master
