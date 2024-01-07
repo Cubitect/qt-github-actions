@@ -12,11 +12,11 @@ defaults:
     shell: cmd
 
 env:
+  PROG:         qt-github-actions
   SOURCE_DIR:   ${{ github.workspace }}
   BUILD_DIR:    ${{ github.workspace }}\build
-  DEPLOY_DIR:   ${{ github.workspace }}\deploy
-  EXECUTABLE:   qt-github-actions.exe
-  ARTIFACT:     qt-github-actions-windows.zip
+  DEPLOY_DIR:   ${{ github.workspace }}\${{ env.PROG }}
+  EXECUTABLE:   ${{ env.BUILD_DIR }}\release\${{ env.PROG }}\${{ env.PROG }}.exe
 
 jobs:
   build:
@@ -24,12 +24,12 @@ jobs:
 
     steps:
       - name: (1) Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: (2) Get all tags for correct version determination
-        working-directory:  ${{ github.workspace }}
+        working-directory: ${{ env.SOURCE_DIR }}
         run:  |
               git fetch --all --tags -f
 
@@ -59,16 +59,14 @@ jobs:
       - name: (6) Deploy
         working-directory: ${{ env.DEPLOY_DIR }}
         run:  |
-              copy ${{ env.BUILD_DIR }}\release\${{  env.EXECUTABLE }} .
-              windeployqt ${{ env.BUILD_DIR }}\release\${{  env.EXECUTABLE }} --dir . --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
-              dir
-              7z a ${{ env.SOURCE_DIR }}\${{ env.ARTIFACT }} ${{ env.DEPLOY_DIR }}\*
+              copy ${{ env.EXECUTABLE }} .
+              windeployqt --dir . ${{ env.EXECUTABLE }} --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
 
       - name: (7) Save build artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
-          path: ${{ env.SOURCE_DIR }}\${{ env.ARTIFACT }}
+          name: ${{ env.PROG }}-${{ github.ref_name }}-win
+          path: ${{ env.DEPLOY_DIR }}
 
 
 
