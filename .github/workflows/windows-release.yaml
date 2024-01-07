@@ -50,15 +50,16 @@ jobs:
       - name: (5) Deploy
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              mkdir ${{env.PROG}}
-              copy ${{env.SOURCE_DIR}}\release\${{env.PROG}} ${{env.PROG}}
-              windeployqt --dir ${{env.PROG}} ${{env.SOURCE_DIR}}\release\${{env.PROG}} --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
+              mkdir ${{env.SOURCE_DIR}}\${{env.PROG}}
+              cd ${{env.SOURCE_DIR}}\${{env.PROG}}
+              copy ${{env.SOURCE_DIR}}\release\${{env.PROG}} .
+              windeployqt --dir . ${{env.SOURCE_DIR}}\release\${{env.PROG}} --compiler-runtime --no-translations --no-system-d3d-compiler --no-opengl-sw --no-angle
 
       - name: (6) Save build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.PROG}}-${{github.ref_name}}-win
-          path: ${{env.PROG}}
+          path: ${{env.SOURCE_DIR}}\${{env.PROG}}
 
 
 
