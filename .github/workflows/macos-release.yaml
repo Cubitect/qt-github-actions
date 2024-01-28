@@ -38,17 +38,15 @@ jobs:
       - name: Build
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              pwd
-              cd ${{env.SOURCE_DIR}}
               qmake CONFIG+=release ${{env.SOURCE_DIR}}
               make
               
       - name: Deploy
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              mkdir ${{env.PROG}}
-              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg -no-plugins
-              ${{env.SOURCE_DIR}}/${{env.PROG}}.app/Contents/MacOS/project --version
+              macdeployqt ${{env.PROG}}.app -dmg -no-plugins
+              ./${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
+              otool -L ${{env.PROG}}.app/Contents/MacOS/${{env.PROG}}
 
       - name: Save build artifact
         uses: actions/upload-artifact@v4
