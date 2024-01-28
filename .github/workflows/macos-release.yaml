@@ -22,10 +22,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get all tags for correct version determination
-        run:  |
-              git fetch --all --tags -f
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
