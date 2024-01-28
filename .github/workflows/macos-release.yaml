@@ -47,14 +47,15 @@ jobs:
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
               mkdir ${{env.PROG}}
-              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg
-              ls -l ${{env.SOURCE_DIR}}
-              ls -l ${{env.PROG}}
+              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg -no-plugins
+              ${{env.SOURCE_DIR}}/${{env.PROG}}.app/Contents/MacOS/project --version
 
       - name: Save build artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{env.PROG}}-${{github.ref_name}}-macos
-          path: ${{env.SOURCE_DIR}}/${{env.PROG}}.app
+          path: |
+                ${{env.SOURCE_DIR}}/${{env.PROG}}.app
+                ${{env.SOURCE_DIR}}/${{env.PROG}}.dmg
 
 
