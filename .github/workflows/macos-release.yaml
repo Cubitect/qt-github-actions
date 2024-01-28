@@ -47,8 +47,7 @@ jobs:
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
               mkdir ${{env.PROG}}
-              ls -l ${{env.SOURCE_DIR}}/${{env.PROG}}.app/Contents
-              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg --dir ${{env.PROG}}
+              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg
               ls -l ${{env.SOURCE_DIR}}
               ls -l ${{env.PROG}}
 
