@@ -47,7 +47,8 @@ jobs:
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
               mkdir ${{env.PROG}}
-              macdeployqt --dir ${{env.PROG}} ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg
+              ls -l ${{env.SOURCE_DIR}}/${{env.PROG}}.app
+              macdeployqt ${{env.SOURCE_DIR}}/${{env.PROG}}.app -dmg
 
       - name: Save build artifact
         uses: actions/upload-artifact@v4
