@@ -17,7 +17,7 @@ env:
 
 jobs:
   build:
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
       - name: (1) Checkout repo
@@ -31,10 +31,10 @@ jobs:
               git fetch --all --tags -f
 
       - name: (3) Install Qt
-        uses: jurplel/install-qt-action@v3
+        uses: jurplel/install-qt-action@v4
         with:
           aqtversion:   '==3.1.*'
-          version:      '5.15.2'
+          version:      '6.7.3'
           host:         'windows'
           target:       'desktop'
           arch:         'win64_mingw81'
