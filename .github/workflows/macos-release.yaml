@@ -55,15 +55,15 @@ jobs:
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
               ./${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
-              rm -rf ${{env.SOURCE_DIR}}/${{env.PROG}}.app
+              rm -rf ./${{env.PROG}}.app
               ls -l /Applications
-              echo Attaching DMG
+              echo "Attaching DMG"
               hdiutil attach ./${{env.PROG}}.dmg
               rm -rf /Applications/${{env.PROG}}.app
               cp -R /Volumes/${{env.PROG}}/${{env.PROG}}.app /Applications
               hdiutil detach /Volumes/${{env.PROG}}
               cd /
-              echo "Run: /Applications/${{env.PROG}}.app/Contents/MacOS/${{env.PROG}"
+              echo "Run"
               /Applications/${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
 
 
