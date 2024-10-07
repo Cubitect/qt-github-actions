@@ -39,11 +39,8 @@ jobs:
       - name: Deploy
         working-directory: ${{env.SOURCE_DIR}}
         run:  |
-              ls -l /Applications/
-              ls -l /Applications/Xcode*/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/
               xcrun --show-sdk-path -sdk macosx
               macdeployqt ${{env.PROG}}.app -dmg -no-plugins
-              ./${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
               otool -L ${{env.PROG}}.app/Contents/MacOS/${{env.PROG}}
 
       - name: Save build artifact
@@ -53,5 +50,17 @@ jobs:
           path: |
                 ${{env.SOURCE_DIR}}/${{env.PROG}}.app
                 ${{env.SOURCE_DIR}}/${{env.PROG}}.dmg
+
+      - name: Test
+        working-directory: ${{env.SOURCE_DIR}}
+        run:  |
+              ./${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
+              ls -l /Applications
+              hdiutil attach ./${{env.PROG}}.dmg
+              rm -rf /Applications/${{env.PROG}}.app
+              cp -R /Volumes/${{env.PROG}}/${{env.PROG}}.app /Applications
+              hdiutil detach /Volumes/${{env.PROG}}
+              cd /
+              /Applications/${{env.PROG}}.app/Contents/MacOS/${{env.PROG}} --version
 
 
